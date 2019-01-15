@@ -28,17 +28,17 @@ import frc.robot.subsystems.*;
 
 */
 
-public class ArmCommand extends Command {
+public class MoveToPosition extends Command {
 
   private ArmSubsystem arm;
   private Robot robot;
   public int currentencoder;
   public int targetencoder = 0;
 
-  public ArmCommand(Robot r, int pos) {
+  public MoveToPosition(Robot r, int pos) {
   // Use requires() here to declare subsystem dependencies
   requires(Robot.arm_subsystem);
-  targetencoder = posToEncoder(pos);
+  targetencoder = getEncoderTicks(pos);
 
   }
 
