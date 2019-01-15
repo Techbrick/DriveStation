@@ -5,13 +5,39 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot;      //MAKE Buttons
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
+  int pos = 0;
+  // Make Joysticks
+  Joystick joy = new Joystick(0); //port number goes here
+  Joystick driver = new Joystick(1);
+
+  //Make JoystickButtons
+  Button [] buttons = new JoystickButton [9]; 
+  for(int i = 0; i < buttons.length; i++)
+  {
+      buttons[i] = new JoystickButton(joy, i);
+  }
+
+  Button up = new JoystickButton(driver, 0);
+  Button down = new JoystickButton(driver, 1);
+  Button home = new JoystickButton(driver, 2);
+  public OI(Robot r) 
+  {
+    for(int i = 0; i < b.length; i++)
+    {
+      buttons[i].whenPressed(new MoveToPosition(r, i));
+    }
+      up.whenPressed(new MoveToPosition(r, ++pos));
+      down.whenPressed(new MoveToPosition(r, --pos));
+      home.whenPressed(new MoveToPosition(r, 0));
+    
+  }
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a
   //// joystick.
@@ -19,7 +45,7 @@ public class OI {
   // number it is.
   // Joystick stick = new Joystick(port);
   // Button button = new JoystickButton(stick, buttonNumber);
-
+   
   // There are a few additional built in buttons you can use. Additionally,
   // by subclassing Button you can create custom triggers and bind those to
   // commands the same as any other Button.
