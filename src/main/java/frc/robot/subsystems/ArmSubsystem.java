@@ -44,12 +44,8 @@ public class ArmSubsystem extends Subsystem {
     return mc_arm.getSensorCollection().getPulseWidthPosition();
   }
 
-  public void moveUp() {
-    mc_arm.
-  }
-
-  public void moveDown() {
-
+  public void move() {
+    
   }
 
   
