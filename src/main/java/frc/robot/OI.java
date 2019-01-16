@@ -24,16 +24,16 @@ public class OI {
 
   //Make JoystickButtons
   Button [] buttons = new JoystickButton [9]; 
-  for(int i = 0; i < buttons.length; i++)
-  {
-      buttons[i] = new JoystickButton(joy, i);
-  }
 
   Button up = new JoystickButton(driver, 0);
   Button down = new JoystickButton(driver, 1);
   Button home = new JoystickButton(driver, 2);
   public OI(Robot r) 
   {
+    for(int i = 0; i < buttons.length; i++)
+    {
+        buttons[i] = new JoystickButton(joy, i);
+    }
     for(int i = 0; i < buttons.length; i++)
     {
       buttons[i].whenPressed(new MoveToPosition(r, i));

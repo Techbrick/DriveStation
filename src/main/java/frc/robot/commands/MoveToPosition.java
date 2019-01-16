@@ -38,7 +38,7 @@ public class MoveToPosition extends Command {
   public MoveToPosition(Robot r, int pos) {
   // Use requires() here to declare subsystem dependencies
   requires(Robot.arm_subsystem);
-  targetencoder = getEncoderTicks(pos);
+  targetencoder = arm.getEncoderTicks(pos);
 
   }
 
@@ -48,8 +48,7 @@ public class MoveToPosition extends Command {
 
   @Override
 
-  protected void
-  initialize() {
+  protected void initialize() {
 
   currentencoder = arm.getEncoderTicks();
 

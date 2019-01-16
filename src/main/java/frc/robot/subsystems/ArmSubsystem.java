@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -22,13 +23,46 @@ import frc.robot.RobotMap;
 public class ArmSubsystem extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private Robot _robot;
+  public Robot _robot;
   private TalonSRX mc_arm;
+
+  // Constants
+  private static final int kSlotIdx = 0;
+  private static final int kPIDLoopIdx = 0;
+  private static final Gains kGains = new Gains(0.2, 0.0, 0.0, 0.2, 0, 1.0);
+  
   public ArmSubsystem(Robot r) {
     _robot = r;
     mc_arm = new TalonSRX(RobotMap.mc_arm_CANID);
 
     mc_arm.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 20);
+
+    mc_arm.setSensorPhase(true);
+		mc_arm.setInverted(false);
+
+		// /* Set relevant frame periods to be at least as fast as periodic rate */
+		// mc_arm.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 20);
+		// mc_arm.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 20);
+
+		/* Set the peak and nominal outputs */
+		mc_arm.configNominalOutputForward(0, 20);
+		mc_arm.configNominalOutputReverse(0, 20);
+		mc_arm.configPeakOutputForward(1, 20);
+		mc_arm.configPeakOutputReverse(-1, 20);
+
+		/* Set Motion Magic gains in slot0 - see documentation */
+		mc_arm.selectProfileSlot(kSlotIdx, kPIDLoopIdx);
+		mc_arm.config_kF(kSlotIdx, kGains.kF, 20);
+		mc_arm.config_kP(kSlotIdx, kGains.kP, 20);
+		mc_arm.config_kI(kSlotIdx, kGains.kI, 20);
+		mc_arm.config_kD(kSlotIdx, kGains.kD, 20);
+
+		/* Set acceleration and vcruise velocity - see documentation */
+		mc_arm.configMotionCruiseVelocity(15000, 20);
+		mc_arm.configMotionAcceleration(6000, 20);
+
+		/* Zero the sensor */
+		mc_arm.setSelectedSensorPosition(0, kPIDLoopIdx, 20);
   }
   @Override
   public void initDefaultCommand() {
@@ -44,9 +78,7 @@ public class ArmSubsystem extends Subsystem {
     return mc_arm.getSensorCollection().getPulseWidthPosition();
   }
 
-  public void move() {
-    
+  public void move(int currAngle, int dPos) {
+    mc_arm.set(ControlMode.MotionMagic, 4096 * 25 * (-currAngle+Math.acos(dPos / -r - Math.cos(currAngle))) / 360);
   }
-
-  
 }
