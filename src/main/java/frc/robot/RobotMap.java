@@ -28,7 +28,7 @@ public class RobotMap {
   public  int rightShiftChannel = 0;
 
   public   double kAngleSetpoint = 0.0;
-  public   double kp_Angle = 0.04; // propotional turning constant
+  public   double kp_Angle = 0.02; // propotional turning constant WAS .04
   public   double ki_Angle = 0.00;
   public   double kd_Angle = 0.00;
   public   double joystickDeadband = .05;
@@ -36,7 +36,7 @@ public class RobotMap {
   public  double pidTurnDeadband = 1;
 
   public   double WHEEL_DIAMETER = 6;
-  public   double ENCODER_PULSE_PER_REV = 2048;
+  public   double ENCODER_PULSE_PER_REV = 4096; //WAS 2048
 
   public   double distanceSetpoint = 0.0;
   public   double kp_distance = 0.025; 
@@ -47,7 +47,7 @@ public class RobotMap {
   public  double encoderMovementThreshold = 200;
   public  int shiftChannel = 0;
 
-  public  double minTurnPower = .24;
+  public  double minTurnPower = .1; //WAS .24
   public  double minDrivePower = .12;
   public  double maxPidPower = .5;
   public  boolean verbose = true;
@@ -59,8 +59,6 @@ public class RobotMap {
   public  double trackWidth = 24;
   public  int averageCounterAccel = 0;
   public  double KpDistanceFollower = .8;
-  
-  public  int mc_arm_CANID = 2;
   
   public RobotMap()
   {

@@ -47,7 +47,6 @@ public class TurnPid{
     public void SetTargetAngle(double targetAngle){
         _targetAngle = targetAngle;
     }
-
     public double GetAnglePidOutput(double currentAngle) {
         currentAngle = Helpers.ConvertYawToHeading(currentAngle);
         SmartDashboard.putNumber("target", _targetAngle);

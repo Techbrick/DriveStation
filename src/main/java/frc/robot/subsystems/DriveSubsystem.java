@@ -30,13 +30,9 @@ public class DriveSubsystem extends Subsystem {
 	Supplier<Double> rightEncoderPosition;
   Supplier<Double> rightEncoderRate;
 
-  // public DriveSubsystem(Robot robot){
-  //   _robot = robot;
-  //   _leftMasterTalon =robot.leftMaster;
-  //   _rightMasterTalon = robot.rightMaster;
 
-  // }
   public DriveSubsystem (Robot robot){
+    _robot = robot;
     _leftMaster = new TalonSRX(robot.robotMap.leftMaster);
     _leftFollower = new TalonSRX(robot.robotMap.leftFollower);
     _rightMaster = new TalonSRX(robot.robotMap.rightMaster);
@@ -75,29 +71,17 @@ public class DriveSubsystem extends Subsystem {
   }
   public void ArcadeDrive(double power, double turn){
     double turnPower = turn;
-    double driveLeft;
-    double driveRight;
     SmartDashboard.putNumber("dg raw power", power);
     SmartDashboard.putNumber("dg raw twist", turn);
-    if(power+turnPower>1)
-    {
-      driveLeft = 1;
-      driveRight = -1;
-    }
-    else if(-power +turnPower<-1)
-    {
-      driveLeft = -1;
-      driveRight = 1;
-    }
-    else
-    {
-      driveLeft = power+turnPower;
-      driveRight = -power+turnPower;
-    }
     _leftMaster.set(ControlMode.PercentOutput, power + turnPower);
     _rightMaster.set(ControlMode.PercentOutput, -power+ turnPower);
     SmartDashboard.putString("DriveTrainStatus", "ArcadeDrive power: "+ Double.toString(power));
     SmartDashboard.putString("DriveTrainTurn", "TurnPower: " + Double.toString(turnPower));
+  }
+  public double getRobotYaw()
+  {
+    double yaw = _robot.navX.getYaw();
+    return yaw;
   }
   public double GetLeftEncoderPosition(){
     double left = leftEncoderPosition.get();
@@ -149,7 +133,7 @@ public class DriveSubsystem extends Subsystem {
   }
   @Override
   public void initDefaultCommand() {
-    
-    //setDefaultCommand(new frc.robot.commands.ManualDrive(_robot));
+  
+    setDefaultCommand(new frc.robot.commands.ManualDrive(_robot));
   }
 }

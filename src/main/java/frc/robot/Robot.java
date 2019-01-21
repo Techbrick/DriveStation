@@ -70,7 +70,6 @@ public class Robot extends TimedRobot {
   // private TalonSRX rightFollower;
   public  DriveSubsystem driveTrain;
   public AHRS navX;
-
   double priorAutospeed = 0;
 	Number[] numberArray = new Number[9];
 
@@ -104,7 +103,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Test Turn Right 90", new TestTurnRight90(this));
     SmartDashboard.putData("Test Fwd 48", new TestMoveFwd48(this));
     SmartDashboard.putData("Test back 48", new TestMoveBack48(this));
-    SmartDashboard.putData("Rotate 5", new Turn(this, 1))
+
 		
     
 
@@ -119,26 +118,28 @@ public class Robot extends TimedRobot {
     NetworkTableInstance.getDefault().setUpdateRate(0.020);
     
     m_oi = new OI();
-    navX.reset();
+    double initYaw = navX.getYaw();
+    SmartDashboard.putNumber("intYaw", initYaw);
+    //navX.reset();
     navX.zeroYaw();
-    new Thread(() -> {
-      UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-      camera.setResolution(640, 480);
+    // new Thread(() -> {
+    //   UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    //   camera.setResolution(640, 480);
       
-      CvSink cvSink = CameraServer.getInstance().getVideo();
-      CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
+    //   CvSink cvSink = CameraServer.getInstance().getVideo();
+    //   CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
       
-      Mat source = new Mat();
-      Mat output = new Mat();
+    //   Mat source = new Mat();
+    //   Mat output = new Mat();
       
-      while(!Thread.interrupted()) {
-          cvSink.grabFrame(source);
-          Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-          outputStream.putFrame(output);
-      }
-  }).start();
+    //   while(!Thread.interrupted()) {
+    //       cvSink.grabFrame(source);
+    //       Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
+    //       outputStream.putFrame(output);
+    //   }
+  // }).start();
 
-  }
+   }
 
   /**
    * This function is called every robot packet, no matter the mode. Use
@@ -215,6 +216,7 @@ public class Robot extends TimedRobot {
   /**
    * This function is called periodically during operator control.
    */
+  
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
@@ -259,8 +261,8 @@ public class Robot extends TimedRobot {
     double yaw = navX.getYaw();
     boolean navxAlive = navX.isConnected();
     SmartDashboard.putBoolean("navXConnected", navxAlive);
-    SmartDashboard.putNumber("navX yaw", Math.round(yaw));
-    
+    SmartDashboard.putNumber("navX yaw", Math.round(driveTrain.getRobotYaw()));
+    SmartDashboard.putNumber("Raw yaw", Math.round(yaw));
     //SmartDashboard.putBoolean("joystick buttom", stick.getRawButton(1));
     double fps = driveTrain.GetAverageEncoderRate()*12;
     SmartDashboard.putNumber("fps", fps);

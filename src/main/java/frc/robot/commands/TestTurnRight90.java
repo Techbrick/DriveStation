@@ -27,6 +27,8 @@ public class TestTurnRight90 extends Command {
     
     private Robot _robot;
     private int stoppedCounter;
+    private double angleTrack;
+    private boolean done;
     private boolean testCompleted;
     private TurnPid _turnPid;
     Timer _timer;
@@ -50,26 +52,30 @@ public class TestTurnRight90 extends Command {
     SmartDashboard.putString("Instructions", "The Robot will turn right 90 degrees, you can press button 2 to stop");
     SmartDashboard.putString("Status", "Running turn right 90 degrees");
     testCompleted = false;
-    // _robot.navX.reset();
-    // _robot.navX.zeroYaw();
+    angleTrack = _robot.driveTrain.getRobotYaw();
+    //extracted();
     stoppedCounter = 0;
     _turnPid = new TurnPid(_robot);
-    _turnPid.SetTargetAngle(90);
+    _turnPid.SetTargetAngle(_robot.driveTrain.getRobotYaw() + 90);
     _timer = new Timer();
     _timer.start();
     _startTime = _timer.get();
+  }
+
+  private void extracted() {
+    _robot.navX.reset();
+    _robot.navX.zeroYaw();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
     if(_robot.stick.getRawButton(1)){
-        double power = _turnPid.GetAnglePidOutput(_robot.navX.getYaw());
+        double power = _turnPid.GetAnglePidOutput(_robot.driveTrain.getRobotYaw());
         _robot.driveTrain.Move(-power, power); 
         if (power == 0){
             stoppedCounter ++;
             if(stoppedCounter == 1){
-
             SmartDashboard.putNumber("test time", _timer.get());
             }
         }else{
@@ -88,8 +94,8 @@ public class TestTurnRight90 extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    
-    boolean done = _robot.stick.getRawButton(2) || testCompleted;
+
+    done = _robot.stick.getRawButton(2) || testCompleted;
     if(done){
         
         SmartDashboard.putString("Status", "Completed turn right 90");
@@ -109,6 +115,6 @@ public class TestTurnRight90 extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    SmartDashboard.putString("Status", "Turn right 90 interupted");
+    SmartDashboard.putString("Status", "Turn right 90 interrupted");
   }
 }
