@@ -60,6 +60,8 @@ public class RobotMap {
   public  int averageCounterAccel = 0;
   public  double KpDistanceFollower = .8;
   
+  public  int mc_arm_CANID = 2;
+  
   public RobotMap()
   {
     
